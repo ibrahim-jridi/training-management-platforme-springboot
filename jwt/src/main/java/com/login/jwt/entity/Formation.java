@@ -33,9 +33,10 @@ public class Formation {
 	private String name;
 	private String description;
 	@ManyToMany(
-			fetch = FetchType.EAGER,  cascade = {
-			       // CascadeType.PERSIST, 
-			        CascadeType.MERGE
+			fetch = FetchType.LAZY,
+				      cascade = {
+				              CascadeType.PERSIST,
+				              CascadeType.MERGE
 			    }
 		)
 	@JoinTable(name = "formation_theme",
@@ -47,20 +48,25 @@ public class Formation {
             }
 	)
 
-	private Set<Theme> theme ;
-	/*
-	 * @ManyToMany( fetch = FetchType.EAGER, cascade = { // CascadeType.PERSIST,
-	 * CascadeType.MERGE } )
-	 * 
-	 * @JoinTable(name = "formation_formatter", joinColumns = {
-	 * 
-	 * @JoinColumn(name = "FORMATION_ID") }, inverseJoinColumns = {
-	 * 
-	 * @JoinColumn(name = "Formatter_ID") } )
-	 * 
-	 * 
-	 * private Set<Formatter> formatter ;
-	 */
+	private Set<Theme> theme = new HashSet<>(); 
+	
+	@ManyToMany(
+			fetch = FetchType.LAZY,
+				      cascade = {
+				              CascadeType.PERSIST,
+				              CascadeType.MERGE
+			    }
+		)
+	@JoinTable(name = "formation_formatter",
+    joinColumns = {
+            @JoinColumn(name = "FORMATION_ID")
+    },
+    inverseJoinColumns = {
+            @JoinColumn(name = "Formatter_ID")
+            }
+	)
+
+	private Set<Formatter> formatter = new HashSet<>(); ;
 	private String lien;
 	
 	
@@ -104,13 +110,14 @@ public class Formation {
 	}
 	
 	
+	public Set<Formatter> getFormatter() {
+		return formatter;
+	}
 
-	/*
-	 * public Set<Formatter> getFormatter() { return formatter; }
-	 * 
-	 * public void setFormatter(Set<Formatter> formatter) { this.formatter =
-	 * formatter; }
-	 */
+	public void setFormatter(Set<Formatter> formatter) {
+		this.formatter = formatter;
+	}
+
 	public String getLien() {
 		return lien;
 	}

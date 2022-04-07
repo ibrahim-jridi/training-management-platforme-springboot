@@ -1,19 +1,12 @@
 package com.login.jwt.entity;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "formatters")
@@ -33,7 +26,8 @@ public class Formatter {
 	
 	private String email;
 	private String phone;
-	private File image;
+	@OneToOne(mappedBy = "formatters")
+    private Image image;
 	private String adresse;
 	private String specialite;
 	
@@ -48,6 +42,15 @@ public class Formatter {
             }
     )
     private Set<Role> role;
+	
+	@ManyToMany(fetch = FetchType.LAZY,
+		      cascade = {
+		          CascadeType.PERSIST,
+		          CascadeType.MERGE
+		      },
+		      mappedBy = "formatters")
+		  @JsonIgnore
+		  private Set<Formation> formation = new HashSet<>();
 	
 	public Formatter() {
 		
@@ -114,11 +117,11 @@ public class Formatter {
 	
 	
 
-	public File getImage() {
+	public Image getImage() {
 		return image;
 	}
 
-	public void setImage(File image) {
+	public void setImage(Image image) {
 		this.image = image;
 	}
 
@@ -153,6 +156,14 @@ public class Formatter {
 
 	public void setRole(Set<Role> role) {
 		this.role = role;
+	}
+
+	public Set<Formation> getFormation() {
+		return formation;
+	}
+
+	public void setFormation(Set<Formation> formation) {
+		this.formation = formation;
 	}
 	
 
