@@ -30,7 +30,7 @@ public class Theme {
 		          CascadeType.PERSIST,
 		          CascadeType.MERGE
 		      },
-		      mappedBy = "themes")
+		      mappedBy = "theme")
 		  @JsonIgnore
 		  private Set<Formation> formation = new HashSet<>();
 	

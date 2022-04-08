@@ -72,6 +72,8 @@ public class Formation {
 	
 	private ZonedDateTime date_creation = ZonedDateTime.now();
 	
+	private Calendar date_debut;
+	
 	private Calendar date_final;
 
 	public long getId() {
@@ -132,6 +134,15 @@ public class Formation {
 
 	public void setDate_creation(ZonedDateTime date_creation) {
 		this.date_creation = date_creation;
+	}
+
+	
+	public Calendar getDate_debut() {
+		return date_debut;
+	}
+
+	public void setDate_debut(Calendar date_debut) {
+		this.date_debut = date_debut;
 	}
 
 	public Calendar getDate_final() {

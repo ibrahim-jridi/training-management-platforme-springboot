@@ -9,7 +9,10 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "formatters")
+@Table(name = "formatters",uniqueConstraints = { 
+		@UniqueConstraint(columnNames = "userName"),
+		@UniqueConstraint(columnNames = "email") 
+	})
 
 public class Formatter {
 	@Id
@@ -26,12 +29,14 @@ public class Formatter {
 	
 	private String email;
 	private String phone;
-	@OneToOne(mappedBy = "formatters")
+	@OneToOne(mappedBy = "formatter")
     private Image image;
 	private String adresse;
 	private String specialite;
 	
 	private String userPassword;
+    private String userConfirmPassword;
+
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "USER_ROLE",
             joinColumns = {
@@ -48,7 +53,7 @@ public class Formatter {
 		          CascadeType.PERSIST,
 		          CascadeType.MERGE
 		      },
-		      mappedBy = "formatters")
+		      mappedBy = "formatter")
 		  @JsonIgnore
 		  private Set<Formation> formation = new HashSet<>();
 	
@@ -56,10 +61,11 @@ public class Formatter {
 		
 	}
 	
-	public Formatter(String userName, String userFirstName, String userLastName, String email,String phone, String userPassword) {
+	public Formatter(String userName, String userFirstName, String userLastName, String email,String phone, String userPassword,String userConfirmPassword) {
 		super();
 		this.userName = userName;
 		this.userPassword = userPassword;
+		this.userConfirmPassword = userConfirmPassword;
 		this.userFirstName = userFirstName;
 		this.userLastName = userLastName;
 		this.email = email;
@@ -148,6 +154,15 @@ public class Formatter {
 
 	public void setUserPassword(String userPassword) {
 		this.userPassword = userPassword;
+	}
+	
+
+	public String getUserConfirmPassword() {
+		return userConfirmPassword;
+	}
+
+	public void setUserConfirmPassword(String userConfirmPassword) {
+		this.userConfirmPassword = userConfirmPassword;
 	}
 
 	public Set<Role> getRole() {

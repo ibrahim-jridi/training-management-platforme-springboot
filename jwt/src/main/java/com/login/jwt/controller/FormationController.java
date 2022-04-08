@@ -77,6 +77,7 @@ public class FormationController {
 			
 			formation.setFormatter(formationDetails.getFormatter());
 			formation.setDate_creation(formationDetails.getDate_creation());
+			formation.setDate_debut(formationDetails.getDate_debut());
 			formation.setDate_final(formationDetails.getDate_final());
 			
 			

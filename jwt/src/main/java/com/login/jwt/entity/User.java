@@ -9,6 +9,10 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(uniqueConstraints = { 
+		@UniqueConstraint(columnNames = "userName"),
+		@UniqueConstraint(columnNames = "email") 
+	})
 public class User {
 
     @Id
@@ -17,6 +21,7 @@ public class User {
     private String userFirstName;
     private String userLastName;
     private String userPassword;
+    private String userConfirmPassword;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "USER_ROLE",
             joinColumns = {
@@ -69,8 +74,17 @@ public class User {
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
     }
+    
 
-    public Set<Role> getRole() {
+    public String getUserConfirmPassword() {
+		return userConfirmPassword;
+	}
+
+	public void setUserConfirmPassword(String userConfirmPassword) {
+		this.userConfirmPassword = userConfirmPassword;
+	}
+
+	public Set<Role> getRole() {
         return role;
     }
 

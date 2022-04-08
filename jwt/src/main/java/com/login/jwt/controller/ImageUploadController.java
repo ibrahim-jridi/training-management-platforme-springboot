@@ -36,7 +36,7 @@ public class ImageUploadController {
 	@PostMapping("/upload")
 	public BodyBuilder uplaodImage(@RequestParam("imageFile") MultipartFile file) throws IOException {
 
-		System.out.println("Original Image Byte Size - " + file.getBytes().length);
+		System.out.println("size orginal de l'image - " + file.getBytes().length);
 		Image img = new Image(file.getOriginalFilename(), file.getContentType(),
 				compressBytes(file.getBytes()));
 		imageRepository.save(img);
@@ -68,7 +68,7 @@ public class ImageUploadController {
 			outputStream.close();
 		} catch (IOException e) {
 		}
-		System.out.println("Compressed Image Byte Size - " + outputStream.toByteArray().length);
+		System.out.println("le size comprissé de l'image : - " + outputStream.toByteArray().length);
 
 		return outputStream.toByteArray();
 	}
