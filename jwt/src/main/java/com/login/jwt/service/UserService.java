@@ -14,6 +14,7 @@ import com.login.jwt.entity.Role;
 import com.login.jwt.entity.User;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -86,6 +87,12 @@ public class UserService  {
 		  Role role =  roleDao.findById("User").get(); Set<Role> userRoles = new HashSet<>();
 		  			userRoles.add(role); user.setRole(userRoles);
 		  			user.setUserPassword(getEncodedPassword(user.getUserPassword()));
+		  			Iterable<User> users = userDao.findAll();
+		  			for (User userExist : users) {
+		  				if (user.getUserName().equals(userExist.getUserName())) {
+		  					System.out.println("il y a un utilisateur avec ce Pseudo svp changer vos");
+		  					return null;
+		  				}}
 	  
 		  			return userDao.save(user);
 		  			}
@@ -94,6 +101,12 @@ public class UserService  {
 			  roleDao.findById("Formatter").get(); Set<Role> userRoles = new HashSet<>();
 			  userRoles.add(role); formatter.setRole(userRoles);
 			  formatter.setUserPassword(getEncodedPassword(formatter.getUserPassword()));
+			  Iterable<User> formatters = userDao.findAll();
+	  			for (User formatterExist : formatters) {
+	  				if (formatter.getUserName().equals(formatterExist.getUserName())) {
+	  					System.out.println("il y a un utilisateur avec ce Pseudo svp changer vos");
+	  					return null;
+	  				}}
 			  
 			  return userDao.save(formatter); }
 	 
@@ -101,6 +114,26 @@ public class UserService  {
     public String getEncodedPassword(String password) {
         return passwordEncoder.encode(password);
     }
+    
+    
+	public User findUserById(String id) {
+      return userDao.findById(id).orElse(null);
+	}
+
+	
+	public void deleteUser(String id) {
+		userDao.deleteById(id);
+	} 
+	
+	
+	 public User findByUsername(String username) {
+		   Optional<User> users = userDao.findByUsername(username);
+		    if (users.isPresent()) {
+		     User user = users.get();
+		   return user;
+		  }
+		   return null;
+		 }
     
     // for password Reset
 	/*

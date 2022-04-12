@@ -3,6 +3,7 @@ package com.login.jwt.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,11 @@ public class FormatterController {
 	/*
 	 * @Autowired private UserDao userDao;
 	 * 
+	 * 
 	 * @Autowired private RoleDao roleDao;
 	 */
+	@Autowired
+	  private UserDao userDao;
 	 @Autowired
 	  private FormatterDao formatterDao;
 	 
@@ -71,8 +75,14 @@ public class FormatterController {
 	
 	// create formatter rest api and save it in formatterDao
 	@PostMapping({"/formatterss"}) public Formatter registerNewFormatter(@RequestBody
-			  Formatter formatter) { 
+			  Formatter formatter)  { 
 		formatter.setUserPassword(getEncodedPassword(formatter.getUserPassword()));
+		List<Formatter> formatters = formatterDao.findAll();
+			for (Formatter formatterExist : formatters) {
+				if (formatter.getUserName().equals(formatterExist.getUserName())) {
+					System.out.println("il y a un utilisateur avec ce Pseudo svp changer vos");
+					return null;
+				}}
 		
 		return formatterDao.save(formatter);
 			  }
@@ -91,6 +101,17 @@ public class FormatterController {
 				.orElseThrow(() -> new ResourceNotFoundException("formatteur n'est pas trouvé avec ce id :" + id));
 		return ResponseEntity.ok(formatter);
 	}
+	 
+	//get formatter by username
+	@GetMapping("/findByUsername/{username}")
+	 public Formatter findByFormatterName(@PathVariable String formattername) {
+		   Optional<Formatter> formatters = formatterDao.findByUsername(formattername);
+		    if (formatters.isPresent()) {
+		     Formatter formatter = formatters.get();
+		   return formatter;
+		  }
+		   return null;
+		 }
 	
 	// update formatter rest api
 	
@@ -102,14 +123,16 @@ public class FormatterController {
 		formatter.setUserName(formatterDetails.getUserName());
 		
 		formatter.setUserFirstName(formatterDetails.getUserFirstName());
-		formatter.setUserLastName(formatter.getUserLastName());
+		formatter.setUserLastName(formatterDetails.getUserLastName());
 		formatter.setEmail(formatterDetails.getEmail());
 		formatter.setImage(formatterDetails.getImage());
 		formatter.setAdresse(formatterDetails.getAdresse());
 		formatter.setSpecialite(formatterDetails.getSpecialite());
 		
 		Formatter updatedFormatter = formatterDao.save(formatter);
+		Formatter updateFormatter = userDao.save(formatter);
 		return ResponseEntity.ok(updatedFormatter);
+		
 	}
 	
 	// delete formatter rest api
